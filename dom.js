@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
-  axios.get("https://crudcrud.com/api/ce70d67d9101482280dbf2dcca8b4ccf/appointmentData")
+  axios.get("https://crudcrud.com/api/8cb53f47c65d4e389c549d3014433ff5/appointmentData")
   .then((Response) => {
    for(var i = 0; i < Response.data.length; i++){
      showUserOnScreen(Response.data[i]);
@@ -22,13 +22,20 @@ function showUserOnScreen(obj){
   childElem.textContent = obj.name + ' - ' + obj.emailId + ' - ' + obj.phoneNo + ' - ' + obj.date + ' - ' + obj.time;
   parentElem.appendChild(childElem);
 
-  // const deleteButton = document.createElement('input');
-  // deleteButton.type = "button";
-  // deleteButton.value = 'Delete';
-  // deleteButton.onclick = () => {
-  //     localStorage.removeItem(obj.emailId);
-  //     parentElem.removeChild(childElem);
-  // }
+  const deleteButton = document.createElement('input');
+  deleteButton.type = "button";
+  deleteButton.value = 'Delete';
+  deleteButton.onclick = () => {
+      axios.delete(`https://crudcrud.com/api/8cb53f47c65d4e389c549d3014433ff5/appointmentData/${obj._id}`)
+       .then((response) => {
+          parentElem.removeChild(childElem);
+       })
+       .catch((err) => {
+          console.log(err)
+       })
+      //localStorage.removeItem(obj.emailId);
+      
+  }
 
   // const editButton = document.createElement('input');
   // editButton.type = "button";
@@ -43,7 +50,7 @@ function showUserOnScreen(obj){
   //     document.getElementById('time').value = obj.time;
   // }
 
-  // childElem.appendChild(deleteButton);
+   childElem.appendChild(deleteButton);
   // childElem.appendChild(editButton);
   // parentElem.appendChild(childElem);
 }
@@ -66,12 +73,13 @@ function registerUser(event){
         time
     }
     
-    axios.post("https://crudcrud.com/api/ce70d67d9101482280dbf2dcca8b4ccf/appointmentData", obj)
+    axios.post("https://crudcrud.com/api/8cb53f47c65d4e389c549d3014433ff5/appointmentData", obj)
       .then((Response) => {
         showUserOnScreen(Response.data);
         console.log(Response);
       })
       .catch((err) => {
+        document.body.innerHTML = document.body.innerHTML + `<h4>Somethig Went Wrong</h4>`;
         console.log(err);
       })
     //let myobj = JSON.parse(localStorage.getItem(obj));
